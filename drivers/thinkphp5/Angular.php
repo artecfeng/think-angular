@@ -11,8 +11,8 @@
 namespace think\view\driver;
 
 use think\angular\Angular as AngularTpl;
-use think\App;
-use think\Request;
+use think\facade\App;
+use think\facade\Request;
 use think\template\driver\File as Storage;
 
 class Angular
@@ -25,10 +25,10 @@ class Angular
     public function __construct($config = [])
     {
         $default = [
-            'debug'            => App::$debug, // 是否开启调试模式
-            'tpl_path'         => App::$modulePath . 'view' . DS, // 模板目录
+            'debug'            => config('app_debug'), // 是否开启调试模式
+            'tpl_path'         => App::getModulePath() . 'view' . DIRECTORY_SEPARATOR, // 模板目录
             'tpl_suffix'       => '.html', // 模板后缀
-            'tpl_cache_path'   => RUNTIME_PATH . 'temp' . DS, // 模板缓存目录
+            'tpl_cache_path'   => App::getRuntimePath() . 'temp' . DIRECTORY_SEPARATOR, // 模板缓存目录
             'tpl_cache_suffix' => '.php', // 模板缓存文件后缀
             'directive_prefix' => 'php-', // 指令前缀
             'directive_max'    => 10000, // 指令的最大解析次数
@@ -87,13 +87,13 @@ class Angular
         $action     = $request->action();
         if (!$template) {
             // 没有传模版名
-            $template = $controller . DS . $action;
-            $template = str_replace('.', DS, $template);
+            $template = $controller . DIRECTORY_SEPARATOR . $action;
+            $template = str_replace('.', DIRECTORY_SEPARATOR, $template);
             return $template;
         } elseif (strpos($template, '/') === false) {
             // 只传了操作名
-            $template = $controller . DS . $template;
-            $template = str_replace('.', DS, $template);
+            $template = $controller . DIRECTORY_SEPARATOR . $template;
+            $template = str_replace('.', DIRECTORY_SEPARATOR, $template);
             return $template;
         }
         // 默认原样返回
